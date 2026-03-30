@@ -164,10 +164,10 @@ InfoSphere follows a clean three-tier MVC structure:
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:24243e,50:302b63,100:0f0c29&height=120&section=footer" width="100%"/>
 
-**Built by Gaya** &nbsp;·&nbsp; Faculty of Computing &nbsp;·&nbsp; v1.0 · 2025
+**Built by Gaya** &nbsp;·&nbsp; Faculty of Computing 
 
 `support@infosphere.com`
 
-*© 2025 InfoSphere*
+*© 2026 InfoSphere*
 
 </div>

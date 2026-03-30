@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>faceScan - Face ID</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0e1a 0%, #0f1530 30%, #141c3a 60%, #1a2245 100%);
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .star { position: absolute; color: #3a3f52; opacity: 0.45; pointer-events: none; user-select: none; }
+    .s1 { top: 28%; left: 16%; font-size: 10px; opacity: 0.35; }
+    .s2 { top: 54%; left: 18%; font-size: 9px;  opacity: 0.3; }
+    .s3 { bottom: 32%; left: 17%; font-size: 11px; opacity: 0.3; }
+
+    .panel {
+      position: relative;
+      width: 800px;
+      height: 600px;
+      background: linear-gradient(135deg, #2a3a5a 0%, #1f2d4d 50%, #1a2642 100%);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 40px 40px 40px;
+      overflow: hidden;
+    }
+
+    .circle-group { position: absolute; top: -35px; left: -35px; width: 140px; height: 140px; pointer-events: none; }
+    .circle { position: absolute; border-radius: 50%; }
+    .circle-1 { top: 0; left: 0; width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, rgba(130,145,175,0.5), rgba(80,95,130,0.25)); }
+    .circle-2 { top: 20px; left: 50px; width: 80px; height: 80px; background: radial-gradient(circle at 35% 35%, rgba(100,115,155,0.55), rgba(60,75,110,0.25)); }
+
+    .title { font-size: 20px; font-weight: 600; color: #ffffff; letter-spacing: 0.4px; margin-bottom: 24px; }
+
+    .preview-box {
+      width: 100%;
+      flex: 1;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      position: relative;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* ── Face status badge (shown inside the video box) ── */
+    #face-status {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      pointer-events: none;
+      transition: background 0.3s, color 0.3s;
+      z-index: 10;
+      white-space: nowrap;
+    }
+
+    #face-status.no-face {
+      background: rgba(220, 50, 50, 0.85);
+      color: #fff;
+    }
+
+    #face-status.face-detected {
+      background: rgba(0, 217, 126, 0.85);
+      color: #fff;
+    }
+
+    .submit-btn {
+      padding: 0 38px; height: 42px; border: none; border-radius: 8px;
+      background: #00d97e; color: #fff; font-size: 16px; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.3px;
+      box-shadow: 0 2px 6px rgba(0,217,126,0.2);
+      transition: background 0.2s, transform 0.12s, box-shadow 0.2s;
+    }
+    .submit-btn:hover { background: #14064d; transform: translateY(-2px); box-shadow: 0 5px 18px rgba(48,91,210,0.5); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background: #4a4a4a; cursor: not-allowed; box-shadow: none; opacity: 0.6; }
+
+    /* scanning btn has two visual states: waiting-for-face (dimmed) and ready (bright) */
+    .scanning-btn {
+      padding: 0 38px; height: 42px; border: none; border-radius: 8px;
+      background: #555e72; color: #aab; font-size: 16px; font-weight: 600;
+      cursor: not-allowed; letter-spacing: 0.3px;
+      box-shadow: none;
+      transition: background 0.3s, color 0.3s, transform 0.12s, box-shadow 0.2s;
+    }
+
+    .scanning-btn.ready {
+      background: #1ab6f4; color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(56,7,188,0.2);
+    }
+
+    .scanning-btn.ready:hover { background: #14064d; transform: translateY(2px); }
+    .scanning-btn:disabled { background: #14064d; cursor: not-allowed; color: #fff; }
+
+    .button-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 10px; }
+
+    .progress-container {
+      width: 100%; height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px; margin-bottom: 10px; margin-top: 6px;
+      display: none; overflow: hidden;
+    }
+    .progress-bar {
+      width: 0%; height: 100%;
+      background: #1ab6f4;
+      box-shadow: 0 0 10px #1ab6f4;
+      transition: width 0.1s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <span class="star s1">✦</span>
+  <span class="star s2">✦</span>
+  <span class="star s3">✦</span>
+
+  <div class="panel">
+    <div class="circle-group">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+    </div>
+
+    <h2 class="title">Face ID scan</h2>
+
+    <div class="preview-box" id="preview-box">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas"></canvas>
+      <!-- Live face detection badge -->
+      <div id="face-status" class="no-face">No face detected</div>
+    </div>
+
+    <div class="progress-container" id="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="button-row">
+      <button class="scanning-btn" id="scan-btn" onclick="startScanning()">scanning</button>
+      <button class="submit-btn" id="submit-btn" disabled>submit</button>
+    </div>
+  </div>
+
+<script>
+  const video            = document.getElementById('video');
+  const canvas           = document.getElementById('canvas');
+  const ctx              = canvas.getContext('2d');
+  const scanBtn          = document.getElementById('scan-btn');
+  const submitBtn        = document.getElementById('submit-btn');
+  const progressBar      = document.getElementById('progress-bar');
+  const progressContainer= document.getElementById('progress-container');
+  const previewBox       = document.getElementById('preview-box');
+  const faceStatus       = document.getElementById('face-status');
+
+  let isScanning    = false;
+  let faceDetected  = false;  // ← gating flag
+  let scanComplete  = false;
+
+  // ─── Canvas resize ────────────────────────────────────────────────────────
+  function resizeCanvas() {
+    const rect = previewBox.getBoundingClientRect();
+    canvas.width  = rect.width;
+    canvas.height = rect.height;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  video.addEventListener('loadedmetadata', resizeCanvas);
+  resizeCanvas();
+
+  // ─── Update scan button state based on face detection ────────────────────
+  function updateScanBtn() {
+    if (scanComplete) return; // don't touch button after scan done
+    if (faceDetected && !isScanning) {
+      scanBtn.classList.add('ready');
+      scanBtn.disabled = false;
+      scanBtn.innerText = 'scanning';
+    } else if (!isScanning) {
+      scanBtn.classList.remove('ready');
+      scanBtn.disabled = true;
+      scanBtn.innerText = 'scanning';
+    }
+  }
+
+  // ─── FaceMesh setup ───────────────────────────────────────────────────────
+  const faceMesh = new FaceMesh({ locateFile: (file) =>
+    `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+  });
+
+  faceMesh.setOptions({
+    maxNumFaces: 1,
+    refineLandmarks: true,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
+
+  faceMesh.onResults((results) => {
+    resizeCanvas();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const hasFace = results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0;
+
+    // ── Update face detection state & UI badge ────────────────────────────
+    if (hasFace !== faceDetected) {
+      faceDetected = hasFace;
+      updateScanBtn();
+    }
+
+    if (hasFace) {
+      faceStatus.textContent = 'Face detected ✓';
+      faceStatus.className   = 'face-detected';
+    } else {
+      faceStatus.textContent = 'No face detected';
+      faceStatus.className   = 'no-face';
+
+      // ── If face is lost MID-scan, abort the scan ───────────────────────
+      if (isScanning) {
+        abortScan();
+      }
+      return;
+    }
+
+    if (!isScanning) return;
+
+    // ── Draw tessellation with object-fit:cover correction ────────────────
+    const vw = video.videoWidth  || 640;
+    const vh = video.videoHeight || 480;
+    const cw = canvas.width;
+    const ch = canvas.height;
+
+    const scale   = Math.max(cw / vw, ch / vh);
+    const scaledW = vw * scale;
+    const scaledH = vh * scale;
+    const offsetX = (cw - scaledW) / 2;
+    const offsetY = (ch - scaledH) / 2;
+
+    function lmToCanvas(lm) {
+      return { x: lm.x * scaledW + offsetX, y: lm.y * scaledH + offsetY };
+    }
+
+    for (const landmarks of results.multiFaceLandmarks) {
+      ctx.strokeStyle = '#00FF00';
+      ctx.lineWidth   = 0.8;
+
+      for (const [a, b] of FACEMESH_TESSELATION) {
+        const p1 = lmToCanvas(landmarks[a]);
+        const p2 = lmToCanvas(landmarks[b]);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+
+      // Nose tip dot
+      const nose = lmToCanvas(landmarks[1]);
+      ctx.beginPath();
+      ctx.arc(nose.x, nose.y, 5, 0, 2 * Math.PI);
+      ctx.fillStyle = '#00FF00';
+      ctx.fill();
+    }
+  });
+
+  // ─── Camera ───────────────────────────────────────────────────────────────
+  const camera = new Camera(video, {
+    onFrame: async () => { await faceMesh.send({ image: video }); },
+    width: 640,
+    height: 480
+  });
+  camera.start();
+
+  // ─── Scanning logic ───────────────────────────────────────────────────────
+  let scanInterval = null;
+
+  function startScanning() {
+    // Guard: only allow if face is detected
+    if (!faceDetected) return;
+
+    isScanning = true;
+    scanBtn.disabled  = true;
+    scanBtn.classList.remove('ready');
+    scanBtn.innerText = 'Scanning...';
+    progressContainer.style.display = 'block';
+
+    let progress = 0;
+    scanInterval = setInterval(() => {
+      progress += 1;
+      progressBar.style.width = progress + '%';
+      if (progress >= 100) {
+        clearInterval(scanInterval);
+        completeScan();
+      }
+    }, 30);
+  }
+
+  function abortScan() {
+    // Face was lost during scan — reset
+    clearInterval(scanInterval);
+    isScanning = false;
+    let progress = 0;
+    progressBar.style.width = '0%';
+    progressContainer.style.display = 'none';
+    scanBtn.innerText = 'scanning';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // updateScanBtn will grey it out since faceDetected is now false
+    updateScanBtn();
+  }
+
+  function completeScan() {
+    isScanning   = false;
+    scanComplete = true;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    faceStatus.textContent = 'Scan complete ✓';
+    faceStatus.className   = 'face-detected';
+    scanBtn.innerText      = 'Scan Successful';
+    scanBtn.style.background = '#00d97e';
+    scanBtn.style.color      = '#fff';
+    submitBtn.disabled = false;
+  }
+
+  // ─── Submit ───────────────────────────────────────────────────────────────
+  submitBtn.addEventListener('click', () => {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width  = video.videoWidth;
+    tempCanvas.height = video.videoHeight;
+    tempCanvas.getContext('2d').drawImage(video, 0, 0);
+    const imageData = tempCanvas.toDataURL('image/jpeg');
+
+    fetch('/complete_registration', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: imageData })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alert('Registration Complete!');
+        window.location.href = '/login';
+      } else {
+        alert('Error: ' + data.message);
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>popupRegi - Registration Success</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #2a2d35;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ───── Main navy panel ───── */
+  .panel {
+    position: relative;
+    width: 600px;
+    height: 420px;
+    background: linear-gradient(135deg, #0d1528 0%, #0f1a30 40%, #121d38 100%);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  /* ───── Scattered stars ───── */
+  .star {
+    position: absolute;
+    color: #3a4a7a;
+    opacity: 0.4;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .s1 { top: 18%;  left: 22%;  font-size: 10px; opacity: 0.35; }
+  .s2 { top: 50%;  left: 8%;   font-size: 9px;  opacity: 0.3;  }
+  .s3 { bottom: 24%; left: 14%; font-size: 11px; opacity: 0.3; }
+  .s4 { bottom: 18%; right: 20%; font-size: 10px; opacity: 0.35; }
+
+  /* ───── Success card ───── */
+  .card {
+    position: relative;
+    width: 360px;
+    height: 180px;
+    background: rgba(110, 120, 145, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Decorative circle orb — top-right */
+  .orb {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%,
+      rgba(170, 180, 205, 0.65),
+      rgba(110, 125, 160, 0.25)
+    );
+    pointer-events: none;
+  }
+
+  /* Message text */
+  .message {
+    position: relative;
+    z-index: 1;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.4px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+
+
+  <!-- Main navy panel -->
+  <div class="panel">
+
+    <!-- Stars scattered inside the panel -->
+    <span class="star s1">✦</span>
+    <span class="star s2">✦</span>
+    <span class="star s3">✦</span>
+    <span class="star s4">✦</span>
+
+    <!-- Success card -->
+    <div class="card">
+      <!-- Decorative orb -->
+      <div class="orb"></div>
+
+      <!-- Message -->
+      <h2 class="message">Registered Successfully</h2>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>category4 - Digital & Multimedia</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #d8d4e8 0%, #c8c2dc 30%, #b8b0d0 60%, #a8a0c4 100%);
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 50px 60px;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     DECORATIVE CIRCLES - Background elements
+  ════════════════════════════════════════════════════════════ */
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Top-left large circle */
+  .circle-1 {
+    top: -90px;
+    left: -90px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle at 35% 35%, 
+      rgba(200, 195, 220, 0.45), 
+      rgba(180, 175, 205, 0.15));
+  }
+
+  /* Top-right large circle */
+  .circle-2 {
+    top: -80px;
+    right: -100px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle at 35% 35%, 
+      rgba(195, 190, 215, 0.4), 
+      rgba(175, 170, 200, 0.14));
+  }
+
+  /* Bottom-left very large circle */
+  .circle-3 {
+    bottom: -140px;
+    left: -110px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle at 40% 40%, 
+      rgba(190, 185, 210, 0.42), 
+      rgba(170, 165, 195, 0.13));
+  }
+
+  /* Bottom-right medium circle */
+  .circle-4 {
+    bottom: -70px;
+    right: -80px;
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle at 35% 35%, 
+      rgba(185, 180, 205, 0.38), 
+      rgba(165, 160, 190, 0.12));
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     TOP BAR - Back button
+  ════════════════════════════════════════════════════════════ */
+  .top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 12px 15px;
+    z-index: 10;
+  }
+
+  .app-label {
+    font-size: 13px;
+    font-weight: 400;
+    color: #4a4555;
+    letter-spacing: 0.3px;
+    margin-bottom: 8px;
+  }
+
+  .back-button {
+    padding: 6px 18px;
+    background: rgba(130, 125, 155, 0.4);
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2a2535;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .back-button:hover {
+    background: rgba(130, 125, 155, 0.55);
+    transform: translateY(-1px);
+  }
+
+  .back-button:active {
+    transform: translateY(0);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     HEADER SECTION
+  ════════════════════════════════════════════════════════════ */
+  .header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 60px;
+  }
+
+  .category-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #2a2535;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .category-description {
+    font-size: 16px;
+    font-weight: 400;
+    color: #3a3444;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     BOOKS GRID
+  ════════════════════════════════════════════════════════════ */
+  .books-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+  }
+
+  .book-card {
+    width: 280px;
+    background: linear-gradient(135deg, #aba5ba 0%, #9b95aa 100%);
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 8px 24px rgba(50, 45, 70, 0.25),
+                0 2px 8px rgba(50, 45, 70, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+
+  .book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(50, 45, 70, 0.35),
+                0 4px 12px rgba(50, 45, 70, 0.2);
+  }
+
+  /* Book cover container */
+  .book-cover {
+    width: 100%;
+    height: 280px;
+    background: #888;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Book info */
+  .book-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .book-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2a2535;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+    font-family: 'Georgia', serif;
+  }
+
+  .book-author {
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+    color: #3a3444;
+    margin-bottom: 14px;
+    font-family: 'Georgia', serif;
+  }
+
+  .book-description {
+    font-size: 12px;
+    font-weight: 400;
+    color: #2a2535;
+    line-height: 1.5;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .books-container {
+      gap: 35px;
+    }
+    .book-card {
+      width: 260px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .books-container {
+      flex-direction: column;
+      gap: 30px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Decorative Background Circles -->
+  <div class="circle circle-1"></div>
+  <div class="circle circle-2"></div>
+  <div class="circle circle-3"></div>
+  <div class="circle circle-4"></div>
+
+  <!-- Top Bar with Back Button -->
+  <div class="top-bar">
+    <a href="{{ url_for('home') }}" style="text-decoration: none;">
+    <button class="back-button">← Back</button>
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1 class="category-title">Digital & Multimedia</h1>
+    <p class="category-description">
+      Accessing the future through e-books, audio books and interactive media.
+    </p>
+  </div>
+
+  <!-- Books Grid -->
+  <div class="books-container">
+
+    <!-- Book 1: Multimedia: Making It Work -->
+    <div class="book-card">
+      <div class="book-cover">
+        <!-- REPLACE: Multimedia Making It Work book cover (purple/green/yellow design) -->
+        <img src="../static/images/d1.jpg" alt="Multimedia: Making It Work">
+      </div>
+      <div class="book-info">
+        <h3 class="book-title">Multimedia: Making It Work</h3>
+        <p class="book-author">Tay Vaughan</p>
+        <p class="book-description">
+          Introduces multimedia concepts such as text, audio, video, and animation.
+        </p>
+      </div>
+    </div>
+
+    <!-- Book 2: Don't Make Me Think -->
+    <div class="book-card">
+      <div class="book-cover">
+        <!-- REPLACE: Don't Make Me Think book cover (red/orange with simple design) -->
+        <img src="../static/images/d2.jpeg" alt="Don't Make Me Think">
+      </div>
+      <div class="book-info">
+        <h3 class="book-title">Don't Make Me Think</h3>
+        <p class="book-author">Steve Krug</p>
+        <p class="book-description">
+          Explains simple principles for creating user-friendly websites and interfaces.
+        </p>
+      </div>
+    </div>
+
+    <!-- Book 3: Interaction Design -->
+    <div class="book-card">
+      <div class="book-cover">
+        <!-- REPLACE: Interaction Design book cover (colorful flowing design with orange) -->
+        <img src="../static/images/d3.jpg" alt="Interaction Design">
+      </div>
+      <div class="book-info">
+        <h3 class="book-title">Interaction Design</h3>
+        <p class="book-author">Preece, Rogers, Sharp</p>
+        <p class="book-description">
+          Discusses how people interact with digital systems and how to design better user experiences.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

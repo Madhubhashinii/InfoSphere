@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>homeScreen - InfoSphere</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     NAVIGATION BAR - Fixed at top
+  ════════════════════════════════════════════════════════════ */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .navbar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .app-label {
+    font-size: 13px;
+    font-weight: 400;
+    color: #6a6d78;
+    letter-spacing: 0.3px;
+  }
+
+  .logo {
+    font-size: 17px;
+    font-weight: 700;
+    font-style: italic;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+  }
+
+
+  .menu-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .menu-icon span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SECTION 1 - HERO IMAGE
+  ════════════════════════════════════════════════════════════ */
+  .hero-section {
+    width: 100%;
+    height: 80vh;
+    margin-top: 70px;
+    position: relative;
+    overflow: hidden;
+    background-color: #1a1510;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    /* REPLACE WITH: Boy reading book in cozy library with warm fireplace glow */
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SECTION 2 - CATEGORY CARDS
+  ════════════════════════════════════════════════════════════ */
+  .category-section {
+    width: 100%;
+    background: #000000;
+    padding: 80px 40px 100px 40px;
+  }
+
+  .category-heading {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 50px;
+  }
+
+  .category-card {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+
+  .category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+  }
+
+  .category-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .category-content {
+    padding: 20px;
+  }
+
+  .category-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+
+  .category-description {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9a9a9a;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .explore-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .explore-btn:hover {
+    background: #1a1a1a;
+    border-color: #666;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SECTION 3 - BLUE BAYMAX SECTION
+  ════════════════════════════════════════════════════════════ */
+  .blue-section {
+    width: 100%;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    padding: 100px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+    position: relative;
+  }
+
+  .blue-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .blue-character {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    /* REPLACE WITH: Baymax character with Hiro sitting on top */
+  }
+
+  .blue-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .blue-heading {
+    font-size: 38px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+
+  .blue-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.8;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SECTION 4 - KNOWLEDGE GRID
+  ════════════════════════════════════════════════════════════ */
+  .knowledge-section {
+    width: 100%;
+    background: #0a0a0a;
+    padding: 80px 50px;
+  }
+
+  .knowledge-header {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .knowledge-heading {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .knowledge-subtext {
+    font-size: 14px;
+    font-weight: 400;
+    color: #9a9a9a;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Masonry Grid Layout */
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 100px;
+    gap: 10px;
+    max-width: none;
+    width:100%;
+    padding : 0 40px;
+    margin: 0 auto;
+  }
+
+  .grid-item {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .grid-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+  }
+
+  .grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Specific grid positions - matching the exact layout */
+  .item-1 { grid-column: 1; grid-row: 1 / 7; }        /* Purple hair anime girl - tall */
+  .item-2 { grid-column: 1; grid-row: 7 / 10; }        /* Forest mushroom - tall */
+  .item-3 { grid-column: 2; grid-row: 1 / 4; }        /* Blue placeholder - tall */
+  .item-4 { grid-column: 2; grid-row: 4 / 10; }        /* Person in white - tall */
+  .item-5 { grid-column: 3; grid-row: 1 / 6; }    /* Sunset candle - wide tall */
+  .item-6 { grid-column: 3; grid-row: 6/10; }        /* City buildings - tall */
+  .item-7 { grid-column: 4; grid-row: 6/8; }        /* Sketch - medium */
+  .item-8 { grid-column: 4; grid-row: 8 / 10; }        /* White placeholder - small */
+  .item-9 { grid-column: 5; grid-row: 1 / 6; }    /* Anime girl red/black - wide tall */
+  .item-10 { grid-column: 6; grid-row: 1 / 6; }       /* Couple illustration - tall */
+  .item-11 { grid-column: 6; grid-row: 6/10; }   /* Airplane sunset - wide tall */
+  .item-12 { grid-column: 5; grid-row: 6/10; }       /* Fireworks - tall */
+
+  /* ═══════════════════════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════════════════════════ */
+  @media (max-width: 1200px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .knowledge-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+    .blue-section {
+      flex-direction: column;
+      gap: 40px;
+    }
+    .knowledge-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Position the header inside the grid */
+.knowledge-grid .knowledge-header {
+  grid-column: 3 / 5;   /* Starts at column 3, ends before column 5 (the center) */
+  grid-row: 1 / 6;      /* Occupies the top half of the grid rows */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers text vertically within that space */
+  align-items: center;     /* Centers text horizontally */
+  text-align: center;
+  padding: 20px;
+  z-index: 10;             /* Ensures it stays above any background elements */
+}
+
+/* Optional: Adjust the text size to fit the tight space better */
+.knowledge-heading {
+  font-size: 40px; /* Slightly smaller to fit the grid column width */
+  margin-bottom: 10px;
+}
+
+.knowledge-subtext {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.jumping-image {
+  position: absolute;
+  right: 5%;           /* Adjust horizontal position */
+  bottom: 0;           /* This forces it to touch the bottom edge */
+  width: 300px;        /* Adjust size as needed */
+  height: auto;
+  z-index: 10;
+  
+  /* Use 'transform-origin' to make the jump feel more natural from the feet */
+  transform-origin: bottom;
+  
+  /* Apply the jump animation */
+  animation: jumpFromFloor 2s ease-in-out infinite;
+}
+
+@keyframes jumpFromFloor {
+  0%, 100% {
+    transform: translateY(0) scaleY(1); 
+    /* Touching the floor */
+  }
+  50% {
+    transform: translateY(-100px); 
+    /* The height of the jump - change this to jump higher or lower */
+  }
+  /* Optional: adding a slight squeeze at 5% and 95% makes it look like it's prepping to jump */
+  5%, 95% {
+    transform: translateY(0) scaleY(0.9);
+  }
+}
+
+/* ══════════════ SIDEBAR STYLES ══════════════ */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Hidden by default */
+    width: 300px;
+    height: 100%;
+    background: #111;
+    z-index: 2000;
+    transition: 0.4s ease;
+    padding: 30px;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+}
+
+.sidebar.active {
+    right: 0; /* Slide in */
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.close-btn {
+    font-size: 30px;
+    cursor: pointer;
+    color: #6a6d78;
+}
+
+.sidebar-links {
+    list-style: none;
+}
+
+.sidebar-links li {
+    margin-bottom: 25px;
+}
+
+.sidebar-links a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.sidebar-links a:hover {
+    color: #00d97e;
+}
+
+/* Background Dimming */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    z-index: 1500;
+}
+
+.overlay.active {
+    display: block;
+}
+
+
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NAVIGATION BAR
+  ════════════════════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <span class="logo">InfoSphere</span>
+    </div>
+    <div class="navbar-right">
+      <div class="menu-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Sidebar Menu
+  ════════════════════════════════════════════════════════════ -->
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <span class="logo">InfoSphere</span>
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+    </div>
+    <ul class="sidebar-links">
+    <li><a href="{{ url_for('home') }}">🏠 Home</a></li>
+    <li><a href="{{ url_for('register') }}">📝 Register Member</a></li>
+    <li><a href="{{ url_for('login') }}">🔍 Face Login</a></li>
+    <li><a href="/view_members">👥 Member Details</a></li> 
+</ul>
+</div>
+
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 1: HERO IMAGE
+  ════════════════════════════════════════════════════════════ -->
+  <section class="hero-section">
+    <!-- REPLACE: Boy reading book in cozy library with fireplace -->
+    <img src="../static/images/ho1.jpg"  alt="Cozy Reading"  class="hero-image">
+    <img src="../static/images/boy.png" alt="Jumping Element" class="jumping-image">
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 2: CATEGORY CARDS
+  ════════════════════════════════════════════════════════════ -->
+  <section class="category-section">
+    <h2 class="category-heading">Explore your preferable<br>Category,</h2>
+
+    <div class="category-grid">
+      
+      <!-- Card 1: Fiction & Literature -->
+      <div class="category-card">
+        <!-- REPLACE: Close-up portrait with warm tones -->
+        <img src="../static/images/fic1.jpg" 
+             alt="Fiction" 
+             class="category-image">
+        <div class="category-content">
+          <h3 class="category-title">Fiction & Literature</h3>
+          <p class="category-description">
+            Discover compelling narratives, timeless classics, and contemporary masterpieces across all genres.
+          </p>
+          <a href="/category1">
+            <button class="explore-btn">Explore now →</button>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2: Academic & Research -->
+      <div class="category-card">
+        <!-- REPLACE: Blue tech/research themed image -->
+        <img src="../static/images/acd1.png" 
+             alt="Academic" 
+             class="category-image">
+        <div class="category-content">
+          <h3 class="category-title">Academic & Research</h3>
+          <p class="category-description">
+            Access peer-reviewed journals, research papers, and scholarly articles across all disciplines.
+          </p>
+          <a href="/category2">
+            <button class="explore-btn">Explore now →</button>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3: Children & Young Adults -->
+      <div class="category-card">
+        <!-- REPLACE: Colorful animated characters -->
+        <img src="../static/images/ch1.jpg" 
+             alt="Children" 
+             class="category-image">
+        <div class="category-content">
+          <h3 class="category-title">Children & Young Adults</h3>
+          <p class="category-description">
+            Curated collection of age-appropriate books that inspire young minds and foster creativity.
+          </p>
+          <a href="/category3">
+            <button class="explore-btn">Explore now →</button>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 4: Digital & Multi-Media -->
+      <div class="category-card">
+        <!-- REPLACE: Blue digital/tech visualization -->
+        <img src="../static/images/dg1.jpg" 
+             alt="Digital" 
+             class="category-image">
+        <div class="category-content">
+          <h3 class="category-title">Digital & Multi-Media</h3>
+          <p class="category-description">
+            Experience interactive books, audiobooks, and enhanced digital publications.
+          </p>
+          <a href="/category4">
+            <button class="explore-btn">Explore now →</button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 3: BLUE BAYMAX SECTION
+  ════════════════════════════════════════════════════════════ -->
+  <section class="blue-section">
+    <div class="blue-left">
+      <!-- REPLACE: Baymax character with Hiro on top -->
+      <img src="../static/images/scrn.png" 
+           alt="Baymax" 
+           class="blue-character">
+    </div>
+    <div class="blue-right">
+      <h2 class="blue-heading">Explore World Through Books</h2>
+      <p class="blue-text">
+        Explore the world through books by discovering vibrant knowledge and ideas 
+        from different cultures, eras, and perspectives. Books serve as portals 
+        to diverse landscapes and experiences, allowing you to travel through time, 
+        understand unfamiliar customs, and gain insights into the human condition. 
+        Whether delving into historical accounts or immersing yourself in richly 
+        imagined worlds, you'll find a vast experience on a library's shelves that 
+        connects with the world.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 4: KNOWLEDGE GRID
+  ════════════════════════════════════════════════════════════ -->
+  <section class="knowledge-section">
+    
+    <div class="knowledge-grid">
+      <div class="knowledge-header">
+      <h2 class="knowledge-heading">Unlock a universe of knowledge</h2>
+      <p class="knowledge-subtext">
+        Our intelligent search engine goes beyond titles. It understands the context of 
+        your research - helping you discover rare manuscripts, archived journals, 
+        and hidden literary gems with just a single keyword.
+      </p>
+    </div>
+
+
+      <!-- Column 1 -->
+      <!-- REPLACE: Purple-haired anime girl portrait -->
+      <div class="grid-item item-1">
+        <img src="../static/images/pir.webp" alt="Anime Girl">
+      </div>
+
+      <!-- REPLACE: Foggy forest mushroom scene -->
+      <div class="grid-item item-2">
+        <img src="../static/images/scr2.jpg" alt="Forest">
+      </div>
+
+      <!-- Column 2 -->
+      
+      <!-- REPLACE: Person in casual white outfit -->
+      <div class="grid-item item-4">
+        <img src="../static/images/scr4.jpg" alt="Person">
+      </div>
+
+      <!-- Column 3-4 (wide) -->
+     
+    
+      <!-- Column 3 bottom -->
+      <!-- REPLACE: Modern city buildings -->
+      <div class="grid-item item-6">
+        <img src="../static/images/scr11.jpg" alt="City">
+      </div>
+
+      <!-- Column 4 bottom left -->
+      <!-- REPLACE: Sketch/drawing figure -->
+      <div class="grid-item item-7">
+        <img src="../static/images/scr7.jpg" alt="Sketch">
+      </div>
+
+      <!-- Column 4 bottom right -->
+      <!-- REPLACE: White/light placeholder -->
+      <div class="grid-item item-8">
+        <img src="../static/images/scr9.webp" alt="White">
+      </div>
+
+      <!-- Column 5-6 top (wide tall) -->
+
+      <!-- Column 5-6 bottom (wide tall) -->
+      <!-- REPLACE: Couple illustration in pastel pink tones -->
+      <div class="grid-item item-10">
+        <img src="../static/images/scr3.webp" alt="Couple">
+      </div>
+
+      <!-- Column 5 bottom -->
+      <!-- REPLACE: Fireworks over building at night -->
+      <div class="grid-item item-12">
+        <img src="../static/images/scr5.jpg" alt="Fireworks">
+      </div>
+
+      <!-- Column 6 bottom -->
+      <!-- REPLACE: Airplane on runway at sunset/dusk -->
+      <div class="grid-item item-11">
+        <img src="../static/images/scr12.jpg" alt="Airplane">
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+
+    // Connect the existing menu-icon to this function
+    document.querySelector('.menu-icon').addEventListener('click', toggleMenu);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>InfoSphere</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1530 30%, #141c3a 60%, #1a2245 100%);
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ───── Scattered ✦ stars across full viewport ───── */
+  .star {
+    position: absolute;
+    color: #3a4a7a;
+    opacity: 0.4;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .s1  { top: 6%;   left: 12%;  font-size: 50px; opacity: 0.45; }
+  .s2  { top: 9%;   left: 28%;  font-size: 10px; opacity: 0.3;  }
+  .s3  { top: 4%;   left: 52%;  font-size: 11px; opacity: 0.35; }
+  .s4  { top: 14%;  left: 68%;  font-size: 9px;  opacity: 0.25; }
+  .s5  { top: 7%;   right: 12%; font-size: 12px; opacity: 0.4;  }
+  .s6  { top: 32%;  left: 6%;   font-size: 9px;  opacity: 0.3;  }
+  .s7  { top: 42%;  left: 22%;  font-size: 50px; opacity: 0.2; }
+  .s8  { top: 55%;  left: 8%;   font-size: 10px; opacity: 0.35; }
+  .s9  { top: 38%;  right: 18%; font-size: 10px; opacity: 0.3;  }
+  .s10 { top: 60%;  right: 8%;  font-size: 50px; opacity: 0.2; }
+  .s11 { bottom: 28%; left: 15%; font-size: 11px; opacity: 0.3; }
+  .s12 { bottom: 18%; left: 35%; font-size: 20px;  opacity: 0.25; }
+  .s13 { bottom: 10%; left: 55%; font-size: 13px; opacity: 0.35; }
+  .s14 { bottom: 22%; right: 25%; font-size: 10px; opacity: 0.3; }
+  .s15 { bottom: 8%;  right: 14%; font-size: 11px; opacity: 0.4; }
+  .s16 { bottom: 35%; right: 5%;  font-size: 20px;  opacity: 0.2; }
+  .s17 { top: 72%;   left: 42%; font-size: 10px; opacity: 0.3;  }
+  .s18 { top: 20%;   left: 44%; font-size: 60px;  opacity: 0.2;  }
+
+  /* ───── 4-pointed bloom shape ───── */
+  .bloom {
+    position: absolute;
+    top: 50%;
+    left: 22%;
+    transform: translate(-50%, -55%);
+    width: 280px;
+    height: 280px;
+    pointer-events: none;
+  }
+
+  .bloom svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ───── Left content block ───── */
+
+  /* ───── Modernized Left Content ───── */
+  .left {
+    position: absolute;
+    top: 50%; /* Centered vertically with the card */
+    left: 12%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+
+  .left h1 {
+    font-size: 56px;
+    font-weight: 800;
+    font-style: normal; /* Removed italic for a cleaner, tech look */
+    letter-spacing: -1.5px;
+    line-height: 1;
+    
+    /* Gradient Text Effect */
+    background: linear-gradient(to bottom, #ffffff 30%, #a0aec0 100%);
+    background-clip: text; 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Soft Glow */
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+    margin-bottom: 8px;
+  }
+
+  /* Adding a modern sub-label for extra polish */
+  .left .brand-tag {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: #4a7aff;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .left p {
+    font-size: 16px;
+    font-style: italic;
+    color: #7a8aad;
+    letter-spacing: 0.4px;
+  }
+
+  /* ───── Card panel — right side ───── */
+  .card {
+    position: absolute;
+    top: 50%;
+    left: 52%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 260px;
+    height: 340px;
+    background: rgba(90, 100, 135, 0.40);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    overflow: hidden;
+  }
+
+  /* Decorative orb — top-right corner of card */
+  .orb {
+    position: absolute;
+    top: -38px;
+    right: -38px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 38%,
+      rgba(185, 195, 225, 0.50),
+      rgba(100, 115, 160, 0.15)
+    );
+    pointer-events: none;
+  }
+
+  /* Buttons */
+  .btn {
+    position: relative;
+    z-index: 1;
+    width: 180px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4a7aff, #3d6ef5);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 16px rgba(60, 100, 240, 0.35);
+    transition: background 0.22s ease, transform 0.12s ease, box-shadow 0.22s ease;
+  }
+
+  .btn:hover {
+    background: linear-gradient(135deg, #5a8aff, #4d7ef5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(60, 100, 240, 0.45);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(60, 100, 240, 0.3);
+  }
+
+
+  .paper-plane {
+  position: fixed;
+  top: 50%;
+  left: -60px;
+  font-size: 10px;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 1;
+
+  animation: fly 14s linear infinite;
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(-100px, 0) rotate(15deg);
+  }
+
+  25% {
+    transform: translate(25vw, -20vh) rotate(5deg);
+  }
+
+  50% {
+    transform: translate(55vw, 10vh) rotate(-10deg);
+  }
+
+  75% {
+    transform: translate(80vw, -15vh) rotate(8deg);
+  }
+
+  100% {
+    transform: translate(110vw, 5vh) rotate(15deg);
+  }
+}
+
+
+</style>
+</head>
+<body>
+
+  <div class="paper-plane">
+    <img src="../static/images/pl.png" 
+         alt="plane Character">
+  </div>
+
+
+
+  <!-- Stars spread across the full viewport -->
+  <span class="star s1">✦</span>
+  <span class="star s2">✦</span>
+  <span class="star s3">✦</span>
+  <span class="star s4">✦</span>
+  <span class="star s5">✦</span>
+  <span class="star s6">✦</span>
+  <span class="star s7">✦</span>
+  <span class="star s8">✦</span>
+  <span class="star s9">✦</span>
+  <span class="star s10">✦</span>
+  <span class="star s11">✦</span>
+  <span class="star s12">✦</span>
+  <span class="star s13">✦</span>
+  <span class="star s14">✦</span>
+  <span class="star s15">✦</span>
+  <span class="star s16">✦</span>
+  <span class="star s17">✦</span>
+  <span class="star s18">✦</span>
+
+  <!-- 4-pointed bloom -->
+  <div class="bloom">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bloomGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#1e2b55"/>
+          <stop offset="100%" stop-color="#0f1530"/>
+        </radialGradient>
+      </defs>
+      <path d="
+        M100,8
+        C109,42 134,62 165,70
+        C196,78 196,78 196,100
+        C196,122 170,142 140,150
+        C112,158 109,162 100,192
+        C91,162 88,158 60,150
+        C30,142 4,122 4,100
+        C4,78 4,78 35,70
+        C66,62 91,42 100,8
+        Z
+      " fill="url(#bloomGrad)" opacity="0.78"/>
+    </svg>
+  </div>
+
+  <!-- Left: title + tagline -->
+  <div class="left">
+    <h1>InfoSphere</h1>
+  </div>
+
+  <!-- Right: login card -->
+   <div class="card">
+  <div class="orb"></div>
+  
+  <a href="{{ url_for('login') }}">
+    <button class="btn">Login</button>
+  </a>
+
+  <a href="{{ url_for('register') }}">
+    <button class="btn">Register</button>
+  </a>
+</div>
+
+
+</body>
+</html>
